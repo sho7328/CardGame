@@ -37,7 +37,7 @@ public class Game
     public void playGame()
     {
         printInstructions();
-        System.out.println("Here is your starting hand:");
+        System.out.println("Here is your starting hand: ");
 
     }
 
