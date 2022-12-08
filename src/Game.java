@@ -49,9 +49,8 @@ public class Game
         System.out.println("ROUND 1:");
         round1.playGame();
 
-        round1.transition();
-
         round = 2;
+        round1.transition();
         Game round2 = new Game();
         System.out.println("ROUND 2:");
         round2.playGame();
@@ -67,11 +66,15 @@ public class Game
 
     public void playGame()
     {
+        // a for loop so that I can break out when a winner is decided early
         for (int b = 0; b < 1; b++)
         {
+            //print out the player's hands
+            // player 1 hand
             System.out.println(user1.getName() + "'s starting hand: ");
             System.out.println(hand1);
             System.out.println("Your starting value is " + getTotalValue(hand1));
+            //check for natural blackjack
             if (checkBJ(hand1, user1))
             {
                 System.out.println(user1.getName() + " got a natural Blackjack and automatically won this round!");
@@ -80,9 +83,11 @@ public class Game
             }
             input.nextLine();
 
+            //player 2 hand
             System.out.println(user2.getName() + "'s starting hand: ");
             System.out.println(hand2);
             System.out.println("Your starting value is " + getTotalValue(hand2));
+            //check for natural
             if (checkBJ(hand2, user2))
             {
                 System.out.println(user2.getName() + " got a natural Blackjack and automatically won this round!");
@@ -100,6 +105,7 @@ public class Game
                 {
                     break;
                 }
+                // add a card to the player's hand and reprint the total value
                 else
                 {
                     hand1.add(deck.deal());
@@ -109,12 +115,14 @@ public class Game
             }
             while(getTotalValue(hand1) < 21);
 
+            //if p1 busts, p2 wins
             if(bust(hand1, user1))
             {
                 System.out.print("BUST! " + user2.getName() + " automatically wins this round.");
                 input.nextLine();
                 break;
             }
+            //check for blackjack. If player reaches blackjack, they automatically win the round
             else if (checkBJ(hand1, user1))
             {
                 System.out.print("Blackjack! " + user1.getName() + " wins this round!");
@@ -172,6 +180,7 @@ public class Game
         }
     }
 
+    // calculate and return the total value of the player's hand.
     public int getTotalValue(ArrayList<Card> hand)
     {
         int totalVal = 0;
@@ -181,6 +190,8 @@ public class Game
         }
         return totalVal;
     }
+
+    //check if the player's hand has busted or not.
     public boolean bust(ArrayList<Card> hand, Player user)
     {
         if (getTotalValue(hand) > 21)
@@ -191,6 +202,7 @@ public class Game
         return false;
     }
 
+    //check if the player has reached blackjack in their hand.
     public boolean checkBJ(ArrayList<Card> hand, Player user)
     {
         //if the player or computer automatically gets blackjack in their initial hand, print blackjack and say they won
@@ -203,11 +215,17 @@ public class Game
         return false;
     }
 
+    // check who won out of the three rounds.
     public String getWinner()
     {
         if(user1.getPoints() > user2.getPoints())
         {
             return user1.getName() + " wins best out of all the rounds!! Thanks for playing!";
+        }
+        else if(user1.getPoints() == user2.getPoints())
+        {
+            return "There was a draw between " + user1.getName() + " and " + user2.getName() + " out of all the rounds!"
+                    + " Thanks for playing!!";
         }
         return user2.getName() + " wins best out of all the rounds!! Thanks for playing!";
     }
@@ -244,6 +262,7 @@ public class Game
         transition();
     }
 
+    // a visual transition between sections of the game.
     public void transition()
     {
         System.out.println("---------------------------------------------------------------------------");
