@@ -15,7 +15,6 @@ public class Deck
             }
         }
         cardsLeft = cards.size();
-
         shuffle();
     }
 
@@ -44,20 +43,25 @@ public class Deck
         {
             return null;
         }
-        return cards.get(cardsLeft--);
+        return cards.get(--cardsLeft);
     }
 
     public void shuffle()
     {
         cardsLeft = cards.size();
-        Card swapper;
+        Card swapper1;
+        Card swapper2;
         int randInt;
-        for(int i = cards.size(); i < cards.size(); i--)
+        for(int i = 0; i < cards.size(); i++)
         {
             randInt = (int)(Math.random() * cards.size());
-            swapper = cards.get(randInt);
-            cards.set(randInt, cards.get(i));
-            cards.set(i, swapper);
+            swapper1 = cards.get(randInt);
+            swapper2 = cards.get(i);
+            cards.set(randInt, swapper2);
+            cards.set(i, swapper1);
         }
     }
+
+
+
 }

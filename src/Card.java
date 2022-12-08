@@ -27,7 +27,7 @@ public class Card
         this.suit = suit;
     }
 
-    public int getPoint() {
+    public int getValue() {
         return value;
     }
 
@@ -37,6 +37,6 @@ public class Card
 
     public String toString()
     {
-        return rank + " of " + "suit";
+        return rank + " of " + suit;
     }
 }
