@@ -11,7 +11,6 @@ public class Game
     private ArrayList<Card> hand1 = new ArrayList<>();
     private Player user2;
     private ArrayList<Card> hand2 = new ArrayList<>();
-    private boolean hit;
     private Deck deck;
     public static Scanner input = new Scanner(System.in);
     private static String name1;
