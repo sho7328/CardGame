@@ -16,13 +16,13 @@ public class Game
     private static String name1;
     private static String name2;
     private static int round;
-
+    private GameViewer gv;
     public Game()
     {
         round = 0;
         //initialize deck
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-        String[] suits = {"♣", "♦", "♥", "♠"};
+        String[] suits = {"♠", "♥", "♦", "♣"};
         int[] values = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
         deck = new Deck(ranks, suits, values);
 
@@ -34,6 +34,8 @@ public class Game
         hand2.add(deck.deal());
         hand2.add(deck.deal());
         user2 = new Player(name2, hand2);
+
+        gv = new GameViewer(this);
     }
 
     public static void main(String[] args)
@@ -46,6 +48,7 @@ public class Game
         round = 1;
         Game round1 = new Game();
         round1.printInstructions();
+        // Show the cards when they are ready to show
         System.out.println("ROUND 1:");
         round1.playGame();
 
@@ -74,6 +77,7 @@ public class Game
             System.out.println(user1.getName() + "'s starting hand: ");
             System.out.println(hand1);
             System.out.println("Your starting value is " + getTotalValue(hand1));
+            gv.repaint();
             //check for natural blackjack
             if (checkBJ(hand1, user1))
             {
@@ -111,6 +115,7 @@ public class Game
                     hand1.add(deck.deal());
                     System.out.println(hand1);
                     System.out.println("The total value is now " + getTotalValue(hand1));
+                    gv.repaint();
                 }
             }
             while(getTotalValue(hand1) < 21);
@@ -144,6 +149,7 @@ public class Game
                     hand2.add(deck.deal());
                     System.out.println(hand2);
                     System.out.println("The total value is now " + getTotalValue(hand2));
+                    gv.repaint();
                 }
             }
             while(getTotalValue(hand2) < 21);
@@ -268,5 +274,24 @@ public class Game
         System.out.println("---------------------------------------------------------------------------");
     }
 
+    public Player getPlayer1()
+    {
+        return user1;
+    }
+
+    public Player getPlayer2()
+    {
+        return user2;
+    }
+
+    public ArrayList<Card> getHand1()
+    {
+        return hand1;
+    }
+
+    public ArrayList<Card> getHand2()
+    {
+        return hand2;
+    }
 
 }

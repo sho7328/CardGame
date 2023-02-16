@@ -1,11 +1,17 @@
+import java.awt.*;
+
 public class Card
 {
     private String rank;
     private String suit;
     private int value;
+    private Image cardImage;
+    private Game game;
+    private GameViewer gv;
 
-    public Card(String theRank, String theSuit, int theValue)
+    public Card(String theRank, String theSuit, int theValue, Image cImage)
     {
+        cardImage = cImage;
         rank = theRank;
         suit = theSuit;
         value = theValue;
@@ -27,6 +33,15 @@ public class Card
         this.suit = suit;
     }
 
+    public Image getCardImage()
+    {
+        return cardImage;
+    }
+    public void setCardImage(Image ci)
+    {
+        this.cardImage = ci;
+    }
+
     public int getValue() {
         return value;
     }
@@ -39,4 +54,10 @@ public class Card
     {
         return rank + " of " + suit;
     }
+
+    public void draw(Graphics g, int x, int y, Card c)
+    {
+        g.drawImage(c.getCardImage(), x, y, 50, 100, gv);
+    }
+
 }

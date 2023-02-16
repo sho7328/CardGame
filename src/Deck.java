@@ -1,18 +1,34 @@
 import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.*;
 public class Deck
 {
     private ArrayList<Card> cards = new ArrayList<Card>();
     private int cardsLeft;
+    private GameViewer gv;
+    private ArrayList<Image> cardImages;
+    private Image c;
+    private final int DECK_LENGTH = 52;
 
     public Deck(String[] cRank, String[] cSuit, int[] cVal)
     {
-        for (int i = 0; i < cSuit.length; i++)
+        // Create the ArrayList of card images
+        cardImages = new ArrayList<Image>();
+        for(int i = 1; i < DECK_LENGTH + 1; i++)
         {
-            for (int j = 0; j < cRank.length; j++)
+            c = new ImageIcon("Resources/" + i + ".png").getImage();
+            cardImages.add(c);
+        }
+        int x = 0;
+        for (int i = 0; i < cRank.length; i++)
+        {
+            for (int j = 0; j < cSuit.length; j++)
             {
-                Card newCard = new Card(cRank[j], cSuit[i], cVal[j]);
+                Card newCard = new Card(cRank[i], cSuit[j], cVal[i], cardImages.get(x));
                 cards.add(newCard);
+                x++;
             }
+
         }
         cardsLeft = cards.size();
         shuffle();
@@ -60,6 +76,11 @@ public class Deck
             cards.set(randInt, swapper2);
             cards.set(i, swapper1);
         }
+    }
+
+    public ArrayList<Image> getCardImages()
+    {
+        return cardImages;
     }
 
 }
