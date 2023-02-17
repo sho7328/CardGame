@@ -17,9 +17,11 @@ public class Game
     private static String name2;
     private static int round;
     private GameViewer gv;
+    private boolean isShowingInstructions;
     public Game()
     {
         round = 0;
+        this.isShowingInstructions = false;
         //initialize deck
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
         String[] suits = {"♠", "♥", "♦", "♣"};
@@ -239,6 +241,7 @@ public class Game
     //print instructions
     public void printInstructions()
     {
+        setIsShowingInstructions(true);
         transition();
         for(int i = 0; i < 1; i++)
         {
@@ -266,6 +269,7 @@ public class Game
             input.nextLine();
         }
         transition();
+        setIsShowingInstructions(false);
     }
 
     // a visual transition between sections of the game.
@@ -294,4 +298,13 @@ public class Game
         return hand2;
     }
 
+    public boolean getIsShowingInstructions()
+    {
+        return isShowingInstructions;
+    }
+
+    public void setIsShowingInstructions(boolean a)
+    {
+        this.isShowingInstructions = a;
+    }
 }
