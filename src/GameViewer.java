@@ -1,17 +1,25 @@
 import javax.swing.*;
 import java.awt.*;
+// SOPHIE HO 2/17/23
+// The front end to the BlackJack game. Displays all the visuals in a separate window.
 
 public class GameViewer extends JFrame
 {
+    // Game object to sync to front end and access methods and variables.
     private Game game;
+    // Background image for the window.
     private Image background;
+    // Proportions of the window
     private final int WINDOW_WIDTH = 960;
     private final int WINDOW_HEIGHT = 540;
+    // Proportions of the cards
     public final int CARD_WIDTH = 133;
     public final int CARD_HEIGHT = 208;
 
+    // GameViewer constructor
     public GameViewer(Game game)
     {
+        // Initialize game object
         this.game = game;
 
         // Create the background image
@@ -44,6 +52,7 @@ public class GameViewer extends JFrame
         // Print out the whole hand for player 1
         for(int i = 0; i < game.getHand1().size(); i++)
         {
+            // Draw the card
             g.drawImage(game.getHand1().get(i).getCardImage(), x, y, CARD_WIDTH, CARD_HEIGHT, this);
             // Change the x value for the next card in the hand
             x += 36 + CARD_WIDTH;

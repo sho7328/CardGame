@@ -1,34 +1,47 @@
 // Sophie Ho Blackjack
 // 12/7/2022
+// SOPHIE HO 2/17/23
+// The Game class runs the back-end of BlackJack.
 
 import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Game
 {
-    //instance variables
+    // Instance variables
+    // The Player object for player 1.
     private Player user1;
+    // Creating an ArrayList for player 1's hand.
     private ArrayList<Card> hand1 = new ArrayList<>();
+    // Player object for player 2.
     private Player user2;
+    // ArrayList for player 2's hand.
     private ArrayList<Card> hand2 = new ArrayList<>();
+    // The entire deck with all the cards.
     private Deck deck;
+    // Scanner to ask for user input.
     public static Scanner input = new Scanner(System.in);
+    // Player 1's name used to create the first player object.
     private static String name1;
+    // Player 2's name used to create the second player object.
     private static String name2;
+    // Static int to specify which round it is.
     private static int round;
+    // GameViewer object to sync up the front and back end.
     private GameViewer gv;
-    private boolean isShowingInstructions;
+    // Game constructor to set all arrays and variables.
     public Game()
     {
+        // Set the game round
         round = 0;
-        this.isShowingInstructions = false;
-        //initialize deck
+
+        // Initialize deck
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
         String[] suits = {"♠", "♥", "♦", "♣"};
         int[] values = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10};
         deck = new Deck(ranks, suits, values);
 
-        //initialize players
+        // Initialize players and deal their 2 starting cards
         hand1.add(deck.deal());
         hand1.add(deck.deal());
         user1 = new Player(name1, hand1);
@@ -37,16 +50,20 @@ public class Game
         hand2.add(deck.deal());
         user2 = new Player(name2, hand2);
 
+        // Set up gv object to sync with front-end
         gv = new GameViewer(this);
     }
 
+    // Run the back-end game
     public static void main(String[] args)
     {
+        // Ask for the player names
         System.out.print("Player 1 name: ");
         name1 = input.nextLine();
         System.out.print("Player 2 name: ");
         name2 = input.nextLine();
 
+        // ROUND 1
         round = 1;
         Game round1 = new Game();
         round1.printInstructions();
@@ -54,141 +71,176 @@ public class Game
         System.out.println("ROUND 1:");
         round1.playGame();
 
+        // ROUND 2
         round = 2;
         round1.transition();
         Game round2 = new Game();
         System.out.println("ROUND 2:");
         round2.playGame();
 
+        // ROUND 3
         round = 3;
         round1.transition();
         Game round3 = new Game();
         System.out.println("ROUND 3:");
         round3.playGame();
 
+        // Print the overall winner
         System.out.println(round3.getWinner());
     }
 
+    // The main method for the BlackJack game
     public void playGame()
     {
-        // a for loop so that I can break out when a winner is decided early
+        // A for loop so that I can break out when a winner is decided early
         for (int b = 0; b < 1; b++)
         {
-            //print out the player's hands
-            // player 1 hand
+            // Print out the player's hands and starting values
+            // Player 1:
             System.out.println(user1.getName() + "'s starting hand: ");
             System.out.println(hand1);
             System.out.println("Your starting value is " + getTotalValue(hand1));
+            // Update the front-end visuals to show the player hands
             gv.repaint();
-            //check for natural blackjack
+            // Check for natural blackjack
             if (checkBJ(hand1, user1))
             {
+                // Player 1 automatically wins teh round if they get a natural blackjack.
                 System.out.println(user1.getName() + " got a natural Blackjack and automatically won this round!");
                 input.nextLine();
+                // Break out of the loop and start the next round or end the game.
                 break;
             }
             input.nextLine();
 
-            //player 2 hand
+            // Player 2:
             System.out.println(user2.getName() + "'s starting hand: ");
             System.out.println(hand2);
             System.out.println("Your starting value is " + getTotalValue(hand2));
-            //check for natural
+            // Check for natural blackjack
             if (checkBJ(hand2, user2))
             {
+                // Player 2 automatically wins the round if they get a natural blackjack.
                 System.out.println(user2.getName() + " got a natural Blackjack and automatically won this round!");
                 input.nextLine();
                 break;
             }
             input.nextLine();
 
-            //PLAYER 1 TURN
+            // PLAYER 1 TURN
             System.out.print(user1.getName() + "'s turn:\n");
+            // While P1 hasn't reached blackjack:
             do
             {
+                // Ask P1 if they want to hit or stand
                 System.out.println(user1.getName() + ", hit or stand?");
+                // If they stand:
                 if(input.nextLine().equals("stand"))
                 {
+                    // Break out of loop and move on to player 2
                     break;
                 }
-                // add a card to the player's hand and reprint the total value
+                // If they hit:
                 else
                 {
+                    // Add a card to the player's hand
                     hand1.add(deck.deal());
+                    // Reprint the total value
                     System.out.println(hand1);
                     System.out.println("The total value is now " + getTotalValue(hand1));
+                    // Update front end visuals to add the new card to the screen
                     gv.repaint();
                 }
             }
             while(getTotalValue(hand1) < 21);
 
-            //if p1 busts, p2 wins
+            // If p1 busts
             if(bust(hand1, user1))
             {
+                // Print in the console that there is a bust and p2 wins.
                 System.out.print("BUST! " + user2.getName() + " automatically wins this round.");
                 input.nextLine();
+                // Break out of current round and go to next round or end game
                 break;
             }
-            //check for blackjack. If player reaches blackjack, they automatically win the round
+            // Check for blackjack.
             else if (checkBJ(hand1, user1))
             {
+                // If player reaches blackjack, they automatically win the round
                 System.out.print("Blackjack! " + user1.getName() + " wins this round!");
                 input.nextLine();
+                // Break out of current round and go to next round or end game
                 break;
             }
 
-            //PLAYER 2 TURN
+            // PLAYER 2 TURN
             System.out.println(user2.getName() + "'s turn:");
+            // While P2 doesn't reach blackjack
             do
             {
+                // Asks to hit or stand
                 System.out.println(user2.getName() + ", hit or stand?");
+                // If stand, break out and move on to next round, or end game.
                 if(input.nextLine().equals("stand"))
                 {
                     break;
                 }
+                // If hit, deal them another card and print out the new total value.
                 else
                 {
                     hand2.add(deck.deal());
                     System.out.println(hand2);
                     System.out.println("The total value is now " + getTotalValue(hand2));
+                    // Update the front-end to display the new card.
                     gv.repaint();
                 }
             }
             while(getTotalValue(hand2) < 21);
 
+            // Check is P2 busts
             if(bust(hand2, user2))
             {
+                // If they bust, print it out
                 System.out.print("BUST! " + user1.getName() + " automatically wins this round.");
                 input.nextLine();
+                // Break and move on to next round
                 break;
             }
+            // Check for a BlackJack
             else if (checkBJ(hand2, user2))
             {
                 System.out.print("Blackjack! " + user2.getName() + " wins this round!");
                 input.nextLine();
+                // Break and move on to next round
                 break;
             }
 
-            //check who won the round
+            // Check who won the round
+            // If p1 wins
             if (getTotalValue(hand1) > getTotalValue(hand2))
             {
+                // Print out the winner and add a point for winner
                 System.out.print(user1.getName() + " wins this round!");
+                user1.addPoints(1);
                 input.nextLine();
             }
+            // Check if there's a draw
             else if (getTotalValue(hand1) == getTotalValue(hand2))
             {
                 System.out.print("There was a draw! No one wins this round.");
                 input.nextLine();
             }
+            // If p2 wins
             else
             {
                 System.out.print(user2.getName() + " wins this round!");
                 input.nextLine();
+                user2.addPoints(1);
             }
         }
     }
 
-    // calculate and return the total value of the player's hand.
+    // Calculate and return the total value of the player's hand.
     public int getTotalValue(ArrayList<Card> hand)
     {
         int totalVal = 0;
@@ -199,7 +251,7 @@ public class Game
         return totalVal;
     }
 
-    //check if the player's hand has busted or not.
+    // Check if the player's hand has busted or not.
     public boolean bust(ArrayList<Card> hand, Player user)
     {
         if (getTotalValue(hand) > 21)
@@ -210,7 +262,7 @@ public class Game
         return false;
     }
 
-    //check if the player has reached blackjack in their hand.
+    // Check if the player has reached blackjack in their hand.
     public boolean checkBJ(ArrayList<Card> hand, Player user)
     {
         //if the player or computer automatically gets blackjack in their initial hand, print blackjack and say they won
@@ -223,7 +275,7 @@ public class Game
         return false;
     }
 
-    // check who won out of the three rounds.
+    // Check who won out of the three rounds and return a String that notifies who wins.
     public String getWinner()
     {
         if(user1.getPoints() > user2.getPoints())
@@ -238,10 +290,9 @@ public class Game
         return user2.getName() + " wins best out of all the rounds!! Thanks for playing!";
     }
 
-    //print instructions
+    // Print game instructions
     public void printInstructions()
     {
-        setIsShowingInstructions(true);
         transition();
         for(int i = 0; i < 1; i++)
         {
@@ -263,48 +314,41 @@ public class Game
             System.out.print("Keep in mind you are drawing a new card from a shuffled deck, so there is a possibility ");
             System.out.print("of drawing a total of over 21. \nThis will cause a bust, and your opponent will automatically win.");
             input.nextLine();
-            //System.out.print("Best out of three rounds wins.");
-            //input.nextLine();
+            System.out.print("Best out of three rounds wins.");
+            input.nextLine();
             System.out.print("Good luck!");
             input.nextLine();
         }
         transition();
-        setIsShowingInstructions(false);
     }
 
-    // a visual transition between sections of the game.
+    // A visual transition between sections of the game.
     public void transition()
     {
         System.out.println("---------------------------------------------------------------------------");
     }
 
+    // Return p1 object for GameViewer access
     public Player getPlayer1()
     {
         return user1;
     }
 
+    // Return p2 object
     public Player getPlayer2()
     {
         return user2;
     }
 
+    // Return p1's hand for gv access
     public ArrayList<Card> getHand1()
     {
         return hand1;
     }
 
+    // Return p2's hand
     public ArrayList<Card> getHand2()
     {
         return hand2;
-    }
-
-    public boolean getIsShowingInstructions()
-    {
-        return isShowingInstructions;
-    }
-
-    public void setIsShowingInstructions(boolean a)
-    {
-        this.isShowingInstructions = a;
     }
 }

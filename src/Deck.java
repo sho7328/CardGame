@@ -1,13 +1,20 @@
 import java.util.ArrayList;
 import javax.swing.*;
 import java.awt.*;
+
+// SOPHIE HO 2/17/23
+// This class creates, shuffles, and deals all the cards in the deck.
 public class Deck
 {
+    // ArrayList of all the cards in the deck
     private ArrayList<Card> cards = new ArrayList<Card>();
+    // Int value for num of cards left in deck
     private int cardsLeft;
-    private GameViewer gv;
+    // ArrayList of images for the front end for each card
     private ArrayList<Image> cardImages;
+    // C represents a card object (used when creating the deck and creating card objs)
     private Image c;
+    // The length of the deck
     private final int DECK_LENGTH = 52;
 
     public Deck(String[] cRank, String[] cSuit, int[] cVal)
@@ -16,10 +23,12 @@ public class Deck
         cardImages = new ArrayList<Image>();
         for(int i = 1; i < DECK_LENGTH + 1; i++)
         {
+            // Create the card image and add it to the ArrayList of card images
             c = new ImageIcon("Resources/" + i + ".png").getImage();
             cardImages.add(c);
         }
         int x = 0;
+        // Create the deck
         for (int i = 0; i < cRank.length; i++)
         {
             for (int j = 0; j < cSuit.length; j++)
@@ -31,9 +40,11 @@ public class Deck
 
         }
         cardsLeft = cards.size();
+        // Shuffle the deck
         shuffle();
     }
 
+    // Check if deck is empty
     public boolean isEmpty()
     {
         if(cardsLeft == 0)
@@ -43,16 +54,19 @@ public class Deck
         return false;
     }
 
+    // Return the whole deck
     public ArrayList<Card> getDeck()
     {
         return cards;
     }
 
+    // Return the num of cards left in deck
     public int getCardsLeft()
     {
         return cardsLeft;
     }
 
+    // Deal one card
     public Card deal()
     {
         if(isEmpty())
@@ -62,6 +76,7 @@ public class Deck
         return cards.get(--cardsLeft);
     }
 
+    // Shuffle the deck
     public void shuffle()
     {
         cardsLeft = cards.size();
@@ -78,6 +93,7 @@ public class Deck
         }
     }
 
+    // Return the ArrayList of all card images.
     public ArrayList<Image> getCardImages()
     {
         return cardImages;
