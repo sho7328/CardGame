@@ -1,6 +1,7 @@
 # CardGame
 Welcome to my CardGame, BlackJack.
 
+
 INSTRUCTIONS AND RULES:
 This game is a 2-player and has 3 rounds. 
 
@@ -29,8 +30,10 @@ To reach a "bust" is to reach a total hand value of over 21, resulting in the pl
 The best out of the total 3 rounds wins the game. 
 
 
+
 HOW TO RUN:
 Go to the Game class and press the green play button near the top right button.
+
 
 
 CONSOLE AND WINDOW:
@@ -39,6 +42,7 @@ The instructions and user prompts will be displayed in the IntelliJ console.
 The card visuals for each player and their total hand value will be displayed in the seperate window.
 
 At the end, the overall winner will be displayed on the console.
+
 
 
 Have fun!
